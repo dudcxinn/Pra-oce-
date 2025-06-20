@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eu te amo</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a23;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .falling {
+      position: absolute;
+      color: pink;
+      font-size: 1.5em;
+      animation: fall linear;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10%);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    .burst {
+      position: absolute;
+      font-size: 1.5em;
+      pointer-events: none;
+      animation: explode 1.5s ease-out forwards;
+      z-index: 20;
+    }
+
+    .heart {
+      color: #ff69b4;
+    }
+
+    .text {
+      color: #ffc0cb;
+    }
+
+    @keyframes explode {
+      0% {
+        opacity: 1;
+        transform: scale(0.5) translate(0, 0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.5) translate(var(--x), var(--y));
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    function createLineFall() {
+      const columns = 30;
+      const spacing = window.innerWidth / columns;
+
+      for (let i = 0; i < columns; i++) {
+        const item = document.createElement('div');
+        item.className = 'falling';
+        item.textContent = Math.random() > 0.5 ? '💗' : 'Iza';
+        item.style.left = i * spacing + 'px';
+        item.style.animationDuration = (Math.random() * 2 + 4) + 's';
+        item.style.fontSize = (Math.random() * 1.2 + 1) + 'em';
+        document.body.appendChild(item);
+        setTimeout(() => item.remove(), 8000);
+      }
+    }
+
+    setInterval(createLineFall, 300);
+
+    document.body.addEventListener('click', (e) => {
+      for (let i = 0; i < 12; i++) {
+        const burst = document.createElement('div');
+        burst.className = 'burst';
+
+        if (i % 2 === 0) {
+          burst.classList.add('text');
+          burst.textContent = 'Iza💗💗';
+        } else {
+          burst.classList.add('heart');
+          burst.textContent = '💖';
+        }
+
+        burst.style.left = `${e.clientX}px`;
+        burst.style.top = `${e.clientY}px`;
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 100 + 30;
+        const x = Math.cos(angle) * distance + 'px';
+        const y = Math.sin(angle) * distance + 'px';
+
+        burst.style.setProperty('--x', x);
+        burst.style.setProperty('--y', y);
+
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), 1500);
+      }
+    });
+  </script>
+</body>
+</html>
